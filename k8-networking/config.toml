@@ -1,5 +1,0 @@
-theme = "reveal-hugo"
-    [outputFormats.Reveal]
-    baseName = "index"
-    mediaType = "text/html"
-    isHTML = true

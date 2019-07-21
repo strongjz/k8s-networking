@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+	<meta name="generator" content="Hugo 0.55.6" />
+    <meta charset="utf-8">
+<title>k8 Networking</title>
+
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="/k8-networking/reveal-js/css/reveal.css"><link rel="stylesheet" href="/k8-networking/reveal-js/css/theme/moon.css" id="theme">
+<link rel="stylesheet" href="/k8-networking/highlight-js/default.min.css">
+    
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+  
+<section>
+
+<h1 id="hello-world">Hello world!</h1>
+
+<p>This is my first slide.</p>
+
+</section><section>
+
+<p>Container
+Pod to Pod
+Service to Pod
+External to Cluster</p>
+
+</section><section>
+</section>
+
+  
+
+
+</div>
+      
+
+    </div>
+<script type="text/javascript" src=/k8-networking/reveal-hugo/object-assign.js></script>
+
+<a href="/k8-networking/reveal-js/css/print/" id="print-location" style="display: none;"></a>
+<script type="text/javascript">
+  var printLocationElement = document.getElementById('print-location');
+  var link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = printLocationElement.href + (window.location.search.match(/print-pdf/gi) ? 'pdf.css' : 'paper.css');
+  document.getElementsByTagName('head')[0].appendChild(link);
+</script>
+
+<script type="application/json" id="reveal-hugo-site-params">{"theme":"moon"}</script>
+<script type="application/json" id="reveal-hugo-page-params">null</script>
+
+<script src="/k8-networking/reveal-js/lib/js/head.min.js"></script>
+<script src="/k8-networking/reveal-js/js/reveal.js"></script>
+
+<script type="text/javascript">
+  
+  
+  function camelize(map) {
+    if (map) {
+      Object.keys(map).forEach(function(k) {
+        newK = k.replace(/(\_\w)/g, function(m) { return m[1].toUpperCase() });
+        if (newK != k) {
+          map[newK] = map[k];
+          delete map[k];
+        }
+      });
+    }
+    return map;
+  }
+  
+  var revealHugoDefaults = { center: true, controls: true, history: true, progress: true, transition: "slide" };
+  var revealHugoSiteParams = JSON.parse(document.getElementById('reveal-hugo-site-params').innerHTML);
+  var revealHugoPageParams = JSON.parse(document.getElementById('reveal-hugo-page-params').innerHTML);
+  
+  var options = Object.assign({},
+    camelize(revealHugoDefaults),
+    camelize(revealHugoSiteParams),
+    camelize(revealHugoPageParams));
+  Reveal.initialize(options);
+</script>
+
+<script type="text/javascript" src="/k8-networking/reveal-js/lib/js/classList.js"></script>
+
+
+<script type="text/javascript" src="/k8-networking/reveal-js/plugin/markdown/marked.js"></script>
+
+<script type="text/javascript" src="/k8-networking/reveal-js/plugin/markdown/markdown.js"></script>
+
+<script type="text/javascript" src="/k8-networking/reveal-js/plugin/highlight/highlight.js"></script>
+
+<script type="text/javascript" src="/k8-networking/reveal-js/plugin/zoom-js/zoom.js"></script>
+
+
+<script type="text/javascript" src="/k8-networking/reveal-js/plugin/notes/notes.js"></script>
+
+
+
+<script type="text/javascript">
+if (hljs)
+  hljs.initHighlightingOnLoad();
+</script>
+    
+    
+  </body>
+</html>
