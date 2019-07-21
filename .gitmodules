@@ -1,0 +1,3 @@
+[submodule "k8-networking/themes/reveal-hugo"]
+	path = k8-networking/themes/reveal-hugo
+	url = git@github.com:dzello/reveal-hugo.git

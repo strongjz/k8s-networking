@@ -1,3 +1,8 @@
+.idea/k8-networking.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/*
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
