@@ -19,16 +19,56 @@
   
 <section>
 
-<h1 id="hello-world">Hello world!</h1>
-
-<p>This is my first slide.</p>
+<h1 id="kubernetes-networking">Kubernetes Networking</h1>
 
 </section><section>
 
-<p>Container
-Pod to Pod
-Service to Pod
-External to Cluster</p>
+<ul>
+<li>Container</li>
+<li>Pod to Pod</li>
+<li>Service to Pod</li>
+<li>External to Cluster</li>
+</ul>
+
+</section><section>
+
+<h2 id="kubernetes-network-model">Kubernetes Network model</h2>
+
+<ul>
+<li>all Pods can communicate with all other Pods without using network address translation (NAT).</li>
+<li>all Nodes can communicate with all Pods without NAT.</li>
+<li>the IP that a Pod sees itself as is the same IP that others see it as.</li>
+</ul>
+
+</section><section>
+
+<h1 id="container">Container</h1>
+
+</section><section>
+
+<h1 id="pod-to-pod">Pod to Pod</h1>
+
+</section><section>
+
+<h1 id="service-to-pod">Service to Pod</h1>
+
+</section><section>
+
+<h1 id="external-to-cluster">External to Cluster</h1>
+
+</section><section>
+
+<p>References:</p>
+
+<ul>
+<li><p><a href="https://kubernetes.io/docs/concepts/configuration/overview/#services">K8 Services</a></p></li>
+
+<li><p><a href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/">K8 Loadbalancer</a></p></li>
+
+<li><p><a href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#external-load-balancer-providers">External Loadbalancers</a></p></li>
+
+<li><p><a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Ingress</a></p></li>
+</ul>
 
 </section><section>
 </section>
