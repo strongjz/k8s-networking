@@ -7,14 +7,6 @@ outputs = ["Reveal"]
 
 ---
 
-* Container
-* Pod to Pod
-* Service to Pod 
-* External to Cluster
-
-
----
-
 ## Kubernetes Network model
 
 * all Pods can communicate with all other Pods without using network address translation (NAT).
@@ -23,21 +15,120 @@ outputs = ["Reveal"]
 
 ---
 
+## it's turtles all the down 
+
+* Container to Container
+* Pod to Pod
+* Service to Pod 
+* External to Cluster
+
+---
+
 # Container
+
+```bash
+kubectl apply -f pod.yml
+```
+
+```bash
+kubectl exec -it bb1 -c curl localhost:80
+```
 
 ---
 
 # Pod to Pod
 
+```bash
+kubectl get pods -o wide
+```
+
+```bash
+kubectl exec -it bb1 -c ping bb3
+```
 ---
 
 # Service to Pod
 
+```bash
+kubectl apply -f service-clusterip.yml
+```
+
+---
+
+### Service Types
+
+* ClusterIP - Default
+* NodePort
+* LoadBalancer
+
+{{% note %}}
+
+ClusterIP: cluster-internal IP.  the Service only reachable from within the cluster. This is the default ServiceType.
+
+NodePort: Exposes the Service on each Node’s IP at a static port (the NodePort). A ClusterIP Service, to which the NodePort Service routes, is automatically created. You’ll be able to contact the NodePort Service, from outside the cluster, by requesting <NodeIP>:<NodePort>.
+
+LoadBalancer: Exposes the Service externally using a cloud provider’s load balancer. NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.
+
+{{% /note %}}
+
+---
+
+# ClusterIP
+
+```bash
+kubectl expose deployment nginx1 --port=80 
+```
+
+---
+
+# NodePort
+
+```bash
+kubectl create service nodeport nginx --tcp=80:80
+```
+
+---
+
+# LoadBalancer
+
+```bash
+kubectl expose deployment nginx1 --port=80 --type=Loadbalancer
+```
+
 ---
 
 # External to Cluster
+ 
+
+* Service Type LoadBalancer
+
+* Ingress
 
 ---
+
+### Ingress
+
+* Ingress Controller
+* Ingress rule 
+
+---
+
+### Ingress Controller
+
+* Nginx
+* Contour 
+* F5 
+
+---
+
+### Ingress rule 
+
+```bash
+kubectl apply -f ingress.yml
+```
+
+---
+
 
 References:
 
@@ -50,4 +141,3 @@ References:
 * [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 
 
----

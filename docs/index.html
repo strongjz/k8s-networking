@@ -23,15 +23,6 @@
 
 </section><section>
 
-<ul>
-<li>Container</li>
-<li>Pod to Pod</li>
-<li>Service to Pod</li>
-<li>External to Cluster</li>
-</ul>
-
-</section><section>
-
 <h2 id="kubernetes-network-model">Kubernetes Network model</h2>
 
 <ul>
@@ -42,19 +33,118 @@
 
 </section><section>
 
+<h2 id="it-s-turtles-all-the-down">it&rsquo;s turtles all the down</h2>
+
+<ul>
+<li>Container to Container</li>
+<li>Pod to Pod</li>
+<li>Service to Pod</li>
+<li>External to Cluster</li>
+</ul>
+
+</section><section>
+
 <h1 id="container">Container</h1>
+
+<pre><code class="language-bash">kubectl apply -f pod.yml
+</code></pre>
+
+<pre><code class="language-bash">kubectl exec -it bb1 -c curl localhost:80
+</code></pre>
 
 </section><section>
 
 <h1 id="pod-to-pod">Pod to Pod</h1>
 
+<pre><code class="language-bash">kubectl get pods -o wide
+</code></pre>
+
+<pre><code class="language-bash">kubectl exec -it bb1 -c ping bb3
+</code></pre>
+
 </section><section>
 
 <h1 id="service-to-pod">Service to Pod</h1>
 
+<pre><code class="language-bash">kubectl apply -f service-clusterip.yml
+</code></pre>
+
+</section><section>
+
+<h3 id="service-types">Service Types</h3>
+
+<ul>
+<li>ClusterIP - Default</li>
+<li>NodePort</li>
+<li>LoadBalancer</li>
+</ul>
+
+<aside class="notes">
+
+ClusterIP: cluster-internal IP.  the Service only reachable from within the cluster. This is the default ServiceType.
+
+NodePort: Exposes the Service on each Node’s IP at a static port (the NodePort). A ClusterIP Service, to which the NodePort Service routes, is automatically created. You’ll be able to contact the NodePort Service, from outside the cluster, by requesting <NodeIP>:<NodePort>.
+
+LoadBalancer: Exposes the Service externally using a cloud provider’s load balancer. NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.
+
+</aside>
+
+</section><section>
+
+<h1 id="clusterip">ClusterIP</h1>
+
+<pre><code class="language-bash">kubectl expose deployment nginx1 --port=80 
+</code></pre>
+
+</section><section>
+
+<h1 id="nodeport">NodePort</h1>
+
+<pre><code class="language-bash">kubectl create service nodeport nginx --tcp=80:80
+</code></pre>
+
+</section><section>
+
+<h1 id="loadbalancer">LoadBalancer</h1>
+
+<pre><code class="language-bash">kubectl expose deployment nginx1 --port=80 --type=Loadbalancer
+</code></pre>
+
 </section><section>
 
 <h1 id="external-to-cluster">External to Cluster</h1>
+
+<ul>
+<li><p>Service Type LoadBalancer</p></li>
+
+<li><p>Ingress</p></li>
+</ul>
+
+</section><section>
+
+<h3 id="ingress">Ingress</h3>
+
+<ul>
+<li>Ingress Controller</li>
+<li>Ingress rule</li>
+</ul>
+
+</section><section>
+
+<h3 id="ingress-controller">Ingress Controller</h3>
+
+<ul>
+<li>Nginx</li>
+<li>Contour</li>
+<li>F5</li>
+</ul>
+
+</section><section>
+
+<h3 id="ingress-rule">Ingress rule</h3>
+
+<pre><code class="language-bash">kubectl apply -f ingress.yml
+</code></pre>
 
 </section><section>
 
@@ -69,8 +159,6 @@
 
 <li><p><a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Ingress</a></p></li>
 </ul>
-
-</section><section>
 </section>
 
   
