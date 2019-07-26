@@ -7,26 +7,41 @@ outputs = ["Reveal"]
 
 ---
 
-## Kubernetes Network model
+# Kubernetes Network model
 
-* all Pods can communicate with all other Pods without using network address translation (NAT).
-* all Nodes can communicate with all Pods without NAT.
-* the IP that a Pod sees itself as is the same IP that others see it as.
+* All Pods can communicate with all other Pods without using network address translation (NAT).
+* All Nodes can communicate with all Pods without NAT.
+* The IP that a Pod sees itself as is the same IP that others see it as.
 
 ---
 
-## it's turtles all the down 
+# It's turtles all the down 
 
+* Node
+* Container
 * Container to Container
 * Pod to Pod
-* Service to Pod 
+* Services
 * External to Cluster
+
+---
+
+# Node
+
+![](/k8-networking/images/node.png)
+
+
 
 ---
 
 # Container
 
-![](/k8-networking/images/node.png)
+![](/k8-networking/images/node-container-1.png)
+
+---
+
+### Container to Container 
+![](/k8-networking/images/node-pod-1.png)
 
 ```bash
 kubectl apply -f pod.yml
@@ -40,8 +55,7 @@ kubectl exec -it bb1 -c curl localhost:80
 
 ### Pod to Pod
 
-![](/k8-networking/images/node-2-pod-to-pod.png)
-
+![](/k8-networking/images/node-container-host-2.png)
 
 ```bash
 kubectl get pods -o wide
@@ -52,18 +66,10 @@ kubectl exec -it bb1 -c ping bb3
 ```
 ---
 
-# Service to Pod
+# Services
 
-```bash
-kubectl apply -f service-clusterip.yml
-```
-
----
-
-### Service Types
-
-* ClusterIP - Default
 * NodePort
+* ClusterIP - Default
 * LoadBalancer
 
 {{% note %}}
@@ -78,23 +84,27 @@ LoadBalancer: Exposes the Service externally using a cloud provider’s load bal
 
 ---
 
-# ClusterIP
+### Service to Pod
+
+![](/k8-networking/images/service.png)
 
 ```bash
-kubectl expose deployment nginx1 --port=80 
+kubectl apply -f service-clusterip.yml
 ```
 
 ---
 
-# NodePort
+# External to Cluster
+ 
+* Service Type Loadbalancer
 
-```bash
-kubectl create apply -f service-nodeport.yml
-```
+* Ingress
 
 ---
 
-# LoadBalancer
+#### Service Type LoadBalancer
+
+![](/k8-networking/images/service-loadbalancer.png)
 
 ```bash
 kubectlcreate apply -f service-loadbalancer.yml
@@ -102,16 +112,7 @@ kubectlcreate apply -f service-loadbalancer.yml
 
 ---
 
-# External to Cluster
- 
-
-* Service Type LoadBalancer
-
-* Ingress
-
----
-
-### Ingress
+# Ingress
 
 * Ingress Controller
 * Ingress rule 
@@ -121,8 +122,8 @@ kubectlcreate apply -f service-loadbalancer.yml
 ### Ingress Controller
 
 * Nginx
-* Contour 
-* F5 
+* Istio 
+* Google Cloud Loadbalancer
 
 ---
 
@@ -131,6 +132,12 @@ kubectlcreate apply -f service-loadbalancer.yml
 ```bash
 kubectl apply -f ingress.yml
 ```
+
+---
+
+#### Ingress 
+
+![](/k8-networking/images/service-Ingress.png)
 
 ---
 
