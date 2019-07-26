@@ -23,28 +23,44 @@
 
 </section><section>
 
-<h2 id="kubernetes-network-model">Kubernetes Network model</h2>
+<h1 id="kubernetes-network-model">Kubernetes Network model</h1>
 
 <ul>
-<li>all Pods can communicate with all other Pods without using network address translation (NAT).</li>
-<li>all Nodes can communicate with all Pods without NAT.</li>
-<li>the IP that a Pod sees itself as is the same IP that others see it as.</li>
+<li>All Pods can communicate with all other Pods without using network address translation (NAT).</li>
+<li>All Nodes can communicate with all Pods without NAT.</li>
+<li>The IP that a Pod sees itself as is the same IP that others see it as.</li>
 </ul>
 
 </section><section>
 
-<h2 id="it-s-turtles-all-the-down">it&rsquo;s turtles all the down</h2>
+<h1 id="it-s-turtles-all-the-down">It&rsquo;s turtles all the down</h1>
 
 <ul>
+<li>Node</li>
+<li>Container</li>
 <li>Container to Container</li>
 <li>Pod to Pod</li>
-<li>Service to Pod</li>
+<li>Services</li>
 <li>External to Cluster</li>
 </ul>
 
 </section><section>
 
+<h1 id="node">Node</h1>
+
+<p><img src="/k8-networking/images/node.png" alt="" /></p>
+
+</section><section>
+
 <h1 id="container">Container</h1>
+
+<p><img src="/k8-networking/images/node-container-1.png" alt="" /></p>
+
+</section><section>
+
+<h3 id="container-to-container">Container to Container</h3>
+
+<p><img src="/k8-networking/images/node-pod-1.png" alt="" /></p>
 
 <pre><code class="language-bash">kubectl apply -f pod.yml
 </code></pre>
@@ -54,7 +70,9 @@
 
 </section><section>
 
-<h1 id="pod-to-pod">Pod to Pod</h1>
+<h3 id="pod-to-pod">Pod to Pod</h3>
+
+<p><img src="/k8-networking/images/node-container-host-2.png" alt="" /></p>
 
 <pre><code class="language-bash">kubectl get pods -o wide
 </code></pre>
@@ -64,18 +82,11 @@
 
 </section><section>
 
-<h1 id="service-to-pod">Service to Pod</h1>
-
-<pre><code class="language-bash">kubectl apply -f service-clusterip.yml
-</code></pre>
-
-</section><section>
-
-<h3 id="service-types">Service Types</h3>
+<h1 id="services">Services</h1>
 
 <ul>
-<li>ClusterIP - Default</li>
 <li>NodePort</li>
+<li>ClusterIP - Default</li>
 <li>LoadBalancer</li>
 </ul>
 
@@ -91,23 +102,11 @@ LoadBalancer: Exposes the Service externally using a cloud provider’s load bal
 
 </section><section>
 
-<h1 id="clusterip">ClusterIP</h1>
+<h3 id="service-to-pod">Service to Pod</h3>
 
-<pre><code class="language-bash">kubectl expose deployment nginx1 --port=80 
-</code></pre>
+<p><img src="/k8-networking/images/service.png" alt="" /></p>
 
-</section><section>
-
-<h1 id="nodeport">NodePort</h1>
-
-<pre><code class="language-bash">kubectl create service nodeport nginx --tcp=80:80
-</code></pre>
-
-</section><section>
-
-<h1 id="loadbalancer">LoadBalancer</h1>
-
-<pre><code class="language-bash">kubectl expose deployment nginx1 --port=80 --type=Loadbalancer
+<pre><code class="language-bash">kubectl apply -f service-clusterip.yml
 </code></pre>
 
 </section><section>
@@ -115,14 +114,23 @@ LoadBalancer: Exposes the Service externally using a cloud provider’s load bal
 <h1 id="external-to-cluster">External to Cluster</h1>
 
 <ul>
-<li><p>Service Type LoadBalancer</p></li>
+<li><p>Service Type Loadbalancer</p></li>
 
 <li><p>Ingress</p></li>
 </ul>
 
 </section><section>
 
-<h3 id="ingress">Ingress</h3>
+<h4 id="service-type-loadbalancer">Service Type LoadBalancer</h4>
+
+<p><img src="/k8-networking/images/service-loadbalancer.png" alt="" /></p>
+
+<pre><code class="language-bash">kubectlcreate apply -f service-loadbalancer.yml
+</code></pre>
+
+</section><section>
+
+<h1 id="ingress">Ingress</h1>
 
 <ul>
 <li>Ingress Controller</li>
@@ -135,8 +143,8 @@ LoadBalancer: Exposes the Service externally using a cloud provider’s load bal
 
 <ul>
 <li>Nginx</li>
-<li>Contour</li>
-<li>F5</li>
+<li>Istio</li>
+<li>Google Cloud Loadbalancer</li>
 </ul>
 
 </section><section>
@@ -145,6 +153,12 @@ LoadBalancer: Exposes the Service externally using a cloud provider’s load bal
 
 <pre><code class="language-bash">kubectl apply -f ingress.yml
 </code></pre>
+
+</section><section>
+
+<h4 id="ingress-1">Ingress</h4>
+
+<p><img src="/k8-networking/images/service-Ingress.png" alt="" /></p>
 
 </section><section>
 
