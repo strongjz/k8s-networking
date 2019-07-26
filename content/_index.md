@@ -26,6 +26,8 @@ outputs = ["Reveal"]
 
 # Container
 
+![](/k8-networking/images/node.png)
+
 ```bash
 kubectl apply -f pod.yml
 ```
@@ -36,7 +38,10 @@ kubectl exec -it bb1 -c curl localhost:80
 
 ---
 
-# Pod to Pod
+### Pod to Pod
+
+![](/k8-networking/images/node-2-pod-to-pod.png)
+
 
 ```bash
 kubectl get pods -o wide
@@ -84,7 +89,7 @@ kubectl expose deployment nginx1 --port=80
 # NodePort
 
 ```bash
-kubectl create service nodeport nginx --tcp=80:80
+kubectl create apply -f service-nodeport.yml
 ```
 
 ---
@@ -92,7 +97,7 @@ kubectl create service nodeport nginx --tcp=80:80
 # LoadBalancer
 
 ```bash
-kubectl expose deployment nginx1 --port=80 --type=Loadbalancer
+kubectlcreate apply -f service-loadbalancer.yml
 ```
 
 ---
