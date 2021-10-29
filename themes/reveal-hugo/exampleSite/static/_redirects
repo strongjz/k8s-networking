@@ -1,2 +1,0 @@
-# Redirect default Netlify subdomain to primary domain
-https://reveal-hugo.netlify.com/* https://reveal-hugo.dzello.com/:splat 301!
