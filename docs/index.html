@@ -9,23 +9,26 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="/k8s-networking/reveal-js/css/reveal.css"><link rel="stylesheet" href="/k8s-networking/reveal-js/css/theme/moon.css" id="theme">
+    <link rel="stylesheet" href="/k8s-networking/reveal-js/css/reset.css">
+<link rel="stylesheet" href="/k8s-networking/reveal-js/css/reveal.css"><link rel="stylesheet" href="/k8s-networking/reveal-js/css/theme/moon.css" id="theme">
 <link rel="stylesheet" href="/k8s-networking/highlight-js/default.min.css">
     
   </head>
   <body>
+    
     <div class="reveal">
       <div class="slides">
   
-<section><h1 id="kubernetes-networking">Kubernetes Networking</h1>
-<hr>
+
+    <section><h1 id="kubernetes-networking">Kubernetes Networking</h1>
+</section><section>
 <h1 id="kubernetes-network-model">Kubernetes Network model</h1>
 <ul>
 <li>All Pods can communicate with all other Pods without using network address translation (NAT).</li>
 <li>All Nodes can communicate with all Pods without NAT.</li>
 <li>The IP that a Pod sees itself as is the same IP that others see it as.</li>
 </ul>
-<hr>
+</section><section>
 <h1 id="its-turtles-all-the-down">It&rsquo;s turtles all the down</h1>
 <ul>
 <li>Node</li>
@@ -35,39 +38,41 @@
 <li>Services</li>
 <li>External to Cluster</li>
 </ul>
-<hr>
+</section><section>
 <h1 id="node">Node</h1>
 <p><img src="/k8s-networking/images/node.png" alt=""></p>
-<hr>
+</section><section>
 <h1 id="container">Container</h1>
 <p><img src="/k8s-networking/images/node-container-1.png" alt=""></p>
-<hr>
+</section><section>
 <h3 id="container-to-container">Container to Container</h3>
 <p><img src="/k8s-networking/images/node-pod-1.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl apply -f pod.yml
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl exec -it bb1 -c curl localhost:80
-</code></pre></div><hr>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f pod.yml
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl exec -it bb1 -c curl localhost:80
+</code></pre></div></section><section>
 <h3 id="pod-to-pod">Pod to Pod</h3>
 <p><img src="/k8s-networking/images/node-container-host-2.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl get pods -o wide
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl exec -it bb1 -c ping bb3
-</code></pre></div><hr>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl get pods -o wide
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl exec -it bb1 -c ping bb3
+</code></pre></div></section><section>
 <h1 id="services">Services</h1>
 <ul>
 <li>NodePort</li>
 <li>ClusterIP - Default</li>
 <li>LoadBalancer</li>
 </ul>
-<!-- raw HTML omitted -->
-<p>ClusterIP: cluster-internal IP.  the Service only reachable from within the cluster. This is the default ServiceType.</p>
+
+
+
+<aside class="notes"><p>ClusterIP: cluster-internal IP.  the Service only reachable from within the cluster. This is the default ServiceType.</p>
 <p>NodePort: Exposes the Service on each Node’s IP at a static port (the NodePort). A ClusterIP Service, to which the NodePort Service routes, is automatically created. You’ll be able to contact the NodePort Service, from outside the cluster, by requesting <!-- raw HTML omitted -->:<!-- raw HTML omitted -->.</p>
 <p>LoadBalancer: Exposes the Service externally using a cloud provider’s load balancer. NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.</p>
-<!-- raw HTML omitted -->
-<hr>
+</aside>
+</section><section>
 <h3 id="service-to-pod">Service to Pod</h3>
 <p><img src="/k8s-networking/images/service.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl apply -f service-clusterip.yml
-</code></pre></div><hr>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f service-clusterip.yml
+</code></pre></div></section><section>
 <h1 id="external-to-cluster">External to Cluster</h1>
 <ul>
 <li>
@@ -77,30 +82,30 @@
 <p>Ingress</p>
 </li>
 </ul>
-<hr>
+</section><section>
 <h4 id="service-type-loadbalancer">Service Type LoadBalancer</h4>
 <p><img src="/k8s-networking/images/service-loadbalancer.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl apply -f service-loadbalancer.yml
-</code></pre></div><hr>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f service-loadbalancer.yml
+</code></pre></div></section><section>
 <h1 id="ingress">Ingress</h1>
 <ul>
 <li>Ingress Controller</li>
 <li>Ingress rule</li>
 </ul>
-<hr>
+</section><section>
 <h3 id="ingress-controller">Ingress Controller</h3>
 <ul>
 <li>Nginx</li>
 <li>Istio</li>
 <li>Google Cloud Loadbalancer</li>
 </ul>
-<hr>
+</section><section>
 <h3 id="ingress-rule">Ingress rule</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl apply -f ingress.yml
-</code></pre></div><hr>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f ingress.yml
+</code></pre></div></section><section>
 <h4 id="ingress-1">Ingress</h4>
 <p><img src="/k8s-networking/images/service-Ingress.png" alt=""></p>
-<hr>
+</section><section>
 <p>References:</p>
 <ul>
 <li>
@@ -140,7 +145,6 @@
 <script type="application/json" id="reveal-hugo-site-params">{"theme":"moon"}</script>
 <script type="application/json" id="reveal-hugo-page-params">null</script>
 
-<script src="/k8s-networking/reveal-js/lib/js/head.min.js"></script>
 <script src="/k8s-networking/reveal-js/js/reveal.js"></script>
 
 <script type="text/javascript">
@@ -170,26 +174,22 @@
   Reveal.initialize(options);
 </script>
 
-<script type="text/javascript" src="/k8s-networking/reveal-js/lib/js/classList.js"></script>
+
+  
+  
+  <script type="text/javascript" src="/k8s-networking/reveal-js/plugin/markdown/marked.js"></script>
+  
+  <script type="text/javascript" src="/k8s-networking/reveal-js/plugin/markdown/markdown.js"></script>
+  
+  <script type="text/javascript" src="/k8s-networking/reveal-js/plugin/highlight/highlight.js"></script>
+  
+  <script type="text/javascript" src="/k8s-networking/reveal-js/plugin/zoom-js/zoom.js"></script>
+  
+  
+  <script type="text/javascript" src="/k8s-networking/reveal-js/plugin/notes/notes.js"></script>
 
 
-<script type="text/javascript" src="/k8s-networking/reveal-js/plugin/markdown/marked.js"></script>
 
-<script type="text/javascript" src="/k8s-networking/reveal-js/plugin/markdown/markdown.js"></script>
-
-<script type="text/javascript" src="/k8s-networking/reveal-js/plugin/highlight/highlight.js"></script>
-
-<script type="text/javascript" src="/k8s-networking/reveal-js/plugin/zoom-js/zoom.js"></script>
-
-
-<script type="text/javascript" src="/k8s-networking/reveal-js/plugin/notes/notes.js"></script>
-
-
-
-<script type="text/javascript">
-if (hljs)
-  hljs.initHighlightingOnLoad();
-</script>
     
     
   </body>
