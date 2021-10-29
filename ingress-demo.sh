@@ -27,3 +27,19 @@ DEMO_PROMPT="${GREEN}➜ ${CYAN}\W "
 
 # hide the evidence
 clear
+
+pei "kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml"
+
+pei "kubectl wait --namespace ingress-nginx \
+       --for=condition=ready pod \
+       --selector=app.kubernetes.io/component=controller \
+       --timeout=90s"
+
+
+wait
+
+pei "kubectl apply -f ingress-demo"
+
+wait
+
+pei "curl localhost:80/testpath"
