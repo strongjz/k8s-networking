@@ -1,5 +1,5 @@
 theme = "reveal-hugo"
-baseURL = "https://strongjz.github.io/k8-networking"
+baseURL = "https://strongjz.github.io/k8s-networking"
 languageCode = "en-us"
 publishDir = "docs"
 
