@@ -7,7 +7,7 @@ outputs = ["Reveal"]
 
 ---
 
-# Kubernetes Network model
+### Kubernetes Network model
 
 * All Pods can communicate with all other Pods without using network address translation (NAT).
 * All Nodes can communicate with all Pods without NAT.
@@ -15,45 +15,54 @@ outputs = ["Reveal"]
 
 ---
 
-# It's turtles all the down 
+### It's turtles all the down 
 
 * Node
+* Kube-proxy
 * Container
-* Container to Container
+* Container Network Interface
 * Pod to Pod
+* Kubernetes DNS
 * Services
 * External to Cluster
+* Troubleshooting
+* Network Policies
 
 ---
 
-# Node
+#### Kubernetes Components
 
-![](/k8s-networking/images/node.png)
+![](/k8s-networking/images/data_flow.png)
 
 ---
 
-# Kube-proxy
+## Kubernetes Node
 
+![](/k8s-networking/images/data_flow_single_node.png)
+
+{{% note %}}
 A network daemon that orchestrates network management on every node
+{{% /note %}}
 
 ---
 
-# Container
+### Container Network Interface
 
-![](/k8s-networking/images/node-container-1.png)
-
----
-
-# Container Network Interface
-
+![](/k8s-networking/images/cni.png)
 
 https://github.com/containernetworking/cni
 
 ---
 
+# Container
 
-### Container to Container 
-![](/k8s-networking/images/node-pod-1.png)
+![](/k8s-networking/images/node_namespaces_to_container.png)
+
+---
+
+### Container Networking
+
+![](/k8s-networking/images/node_network_namespace_container.png)
 
 ```bash
 kubectl apply -f pod.yml
@@ -67,7 +76,7 @@ kubectl exec -it bb1 -c curl localhost:80
 
 ### Pod to Pod
 
-![](/k8s-networking/images/node-container-host-2.png)
+![](/k8s-networking/images/node_namespaces_multi_pod.png)
 
 ```bash
 kubectl get pods -o wide
@@ -78,7 +87,9 @@ kubectl exec -it bb1 -c ping bb3
 ```
 ---
 
-# Kubernetes DNS
+### Kubernetes DNS
+
+![](/k8s-networking/images/coredns.png)
 
 ---
 
@@ -123,7 +134,7 @@ kubectl apply -f service-clusterip.yml
 
 #### Service Type LoadBalancer
 
-![](/k8s-networking/images/service-loadbalancer.png)
+![](/k8s-networking/images/service_loadbalancer.png)
 
 ```bash
 kubectl apply -f service-loadbalancer.yml
@@ -149,7 +160,26 @@ Lots more https://kubernetes.io/docs/concepts/services-networking/ingress-contro
 
 ---
 
+#### Ingress Controller
+
+![](/k8s-networking/images/ingress_cloud.png)
+
+---
+
 ### Ingress rule 
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: basic-ingress
+spec:
+  selector:
+    app: MyApp
+  ports:
+    - protocol: TCP
+      port: 8080
+```
 
 ```bash
 kubectl apply -f ingress.yml
@@ -157,22 +187,39 @@ kubectl apply -f ingress.yml
 
 ---
 
-#### Ingress 
-
-![](/k8s-networking/images/service-Ingress.png)
-
----
-
 # Troubleshooting
 
 ---
 
-# Network Policy
+### Network Policy
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: demo-db
+spec:
+  podSelector:
+    matchLabels:
+      app: demo-db
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: demo
+```
 
 ---
 
+#### Networking and Kubernetes 
 
+![](/k8s-networking/images/cover.png)
 
+Available on [Amazon](https://www.amazon.com/Networking-Kubernetes-James-Strong-ebook/dp/B09FX149GC/) and [O'Reilly](https://learning.oreilly.com/library/view/networking-and-kubernetes/9781492081647/)
+
+---
 
 References:
 

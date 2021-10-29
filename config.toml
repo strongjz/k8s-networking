@@ -9,4 +9,4 @@ mediaType = "text/html"
 isHTML = true
 
 [params.reveal_hugo]
-theme = "moon"
+theme = "solarized"
