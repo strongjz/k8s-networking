@@ -37,18 +37,18 @@
 </ul>
 <hr>
 <h1 id="node">Node</h1>
-<p><img src="/k8-networking/images/node.png" alt=""></p>
+<p><img src="/k8s-networking/images/node.png" alt=""></p>
 <hr>
 <h1 id="container">Container</h1>
-<p><img src="/k8-networking/images/node-container-1.png" alt=""></p>
+<p><img src="/k8s-networking/images/node-container-1.png" alt=""></p>
 <hr>
 <h3 id="container-to-container">Container to Container</h3>
-<p><img src="/k8-networking/images/node-pod-1.png" alt=""></p>
+<p><img src="/k8s-networking/images/node-pod-1.png" alt=""></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl apply -f pod.yml
 </code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl exec -it bb1 -c curl localhost:80
 </code></pre></div><hr>
 <h3 id="pod-to-pod">Pod to Pod</h3>
-<p><img src="/k8-networking/images/node-container-host-2.png" alt=""></p>
+<p><img src="/k8s-networking/images/node-container-host-2.png" alt=""></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl get pods -o wide
 </code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl exec -it bb1 -c ping bb3
 </code></pre></div><hr>
@@ -65,7 +65,7 @@
 <!-- raw HTML omitted -->
 <hr>
 <h3 id="service-to-pod">Service to Pod</h3>
-<p><img src="/k8-networking/images/service.png" alt=""></p>
+<p><img src="/k8s-networking/images/service.png" alt=""></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl apply -f service-clusterip.yml
 </code></pre></div><hr>
 <h1 id="external-to-cluster">External to Cluster</h1>
@@ -79,8 +79,8 @@
 </ul>
 <hr>
 <h4 id="service-type-loadbalancer">Service Type LoadBalancer</h4>
-<p><img src="/k8-networking/images/service-loadbalancer.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectlcreate apply -f service-loadbalancer.yml
+<p><img src="/k8s-networking/images/service-loadbalancer.png" alt=""></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl apply -f service-loadbalancer.yml
 </code></pre></div><hr>
 <h1 id="ingress">Ingress</h1>
 <ul>
@@ -99,7 +99,7 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">kubectl apply -f ingress.yml
 </code></pre></div><hr>
 <h4 id="ingress-1">Ingress</h4>
-<p><img src="/k8-networking/images/service-Ingress.png" alt=""></p>
+<p><img src="/k8s-networking/images/service-Ingress.png" alt=""></p>
 <hr>
 <p>References:</p>
 <ul>

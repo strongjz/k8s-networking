@@ -28,7 +28,7 @@ outputs = ["Reveal"]
 
 # Node
 
-![](/k8-networking/images/node.png)
+![](/k8s-networking/images/node.png)
 
 
 
@@ -36,12 +36,12 @@ outputs = ["Reveal"]
 
 # Container
 
-![](/k8-networking/images/node-container-1.png)
+![](/k8s-networking/images/node-container-1.png)
 
 ---
 
 ### Container to Container 
-![](/k8-networking/images/node-pod-1.png)
+![](/k8s-networking/images/node-pod-1.png)
 
 ```bash
 kubectl apply -f pod.yml
@@ -55,7 +55,7 @@ kubectl exec -it bb1 -c curl localhost:80
 
 ### Pod to Pod
 
-![](/k8-networking/images/node-container-host-2.png)
+![](/k8s-networking/images/node-container-host-2.png)
 
 ```bash
 kubectl get pods -o wide
@@ -86,7 +86,7 @@ LoadBalancer: Exposes the Service externally using a cloud provider’s load bal
 
 ### Service to Pod
 
-![](/k8-networking/images/service.png)
+![](/k8s-networking/images/service.png)
 
 ```bash
 kubectl apply -f service-clusterip.yml
@@ -104,10 +104,10 @@ kubectl apply -f service-clusterip.yml
 
 #### Service Type LoadBalancer
 
-![](/k8-networking/images/service-loadbalancer.png)
+![](/k8s-networking/images/service-loadbalancer.png)
 
 ```bash
-kubectlcreate apply -f service-loadbalancer.yml
+kubectl apply -f service-loadbalancer.yml
 ```
 
 ---
@@ -137,7 +137,7 @@ kubectl apply -f ingress.yml
 
 #### Ingress 
 
-![](/k8-networking/images/service-Ingress.png)
+![](/k8s-networking/images/service-Ingress.png)
 
 ---
 
