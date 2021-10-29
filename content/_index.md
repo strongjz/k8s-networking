@@ -69,7 +69,7 @@ kubectl apply -f pod.yml
 ```
 
 ```bash
-kubectl exec -it bb1 -c curl localhost:80
+kubectl exec -it bb1 -c bb1 -- curl localhost:80
 ```
 
 ---
@@ -83,7 +83,7 @@ kubectl get pods -o wide
 ```
 
 ```bash
-kubectl exec -it bb1 -c ping bb3
+kubectl exec -it bb1 -c bb1 -- ping $(kubectl get pods bb3 -o json | jq .status.podIP -r)
 ```
 ---
 
@@ -127,7 +127,6 @@ kubectl apply -f service-clusterip.yml
 # External to Cluster
  
 * Service Type Loadbalancer
-
 * Ingress
 
 ---
@@ -169,16 +168,21 @@ Lots more https://kubernetes.io/docs/concepts/services-networking/ingress-contro
 ### Ingress rule 
 
 ```yaml
-apiVersion: v1
-kind: Service
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
   name: basic-ingress
 spec:
-  selector:
-    app: MyApp
-  ports:
-    - protocol: TCP
-      port: 8080
+  rules:
+    - http:
+        paths:
+          - path: /testpath
+            pathType: Prefix
+            backend:
+              service:
+                name: my-service
+                port:
+                  number: 8080
 ```
 
 ```bash
@@ -225,9 +229,9 @@ References:
 
 * [Kubernetes Networking Links](https://github.com/nleiva/kubernetes-networking-links)
 * [Kubernetes Services Tutorials](https://kubernetes.io/docs/tasks/access-application-cluster/)
-* [K8 Services](https://kubernetes.io/docs/concepts/configuration/overview/#services)
-* [K8 Loadbalancer](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/)
-* [External Loadbalancers](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#external-load-balancer-providers)
+* [K8s Services](https://kubernetes.io/docs/concepts/configuration/overview/#services)
+  * [K8s Loadbalancer](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/)
+* [External Load balancers](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#external-load-balancer-providers)
 * [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 
 

@@ -13,4 +13,3 @@ spec:
                 name: my-service
                 port:
                   number: 8080
-
