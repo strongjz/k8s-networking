@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="/k8s-networking/reveal-js/css/reset.css">
-<link rel="stylesheet" href="/k8s-networking/reveal-js/css/reveal.css"><link rel="stylesheet" href="/k8s-networking/reveal-js/css/theme/moon.css" id="theme">
+<link rel="stylesheet" href="/k8s-networking/reveal-js/css/reveal.css"><link rel="stylesheet" href="/k8s-networking/reveal-js/css/theme/solarized.css" id="theme">
 <link rel="stylesheet" href="/k8s-networking/highlight-js/default.min.css">
     
   </head>
@@ -22,39 +22,58 @@
 
     <section><h1 id="kubernetes-networking">Kubernetes Networking</h1>
 </section><section>
-<h1 id="kubernetes-network-model">Kubernetes Network model</h1>
+<h3 id="kubernetes-network-model">Kubernetes Network model</h3>
 <ul>
 <li>All Pods can communicate with all other Pods without using network address translation (NAT).</li>
 <li>All Nodes can communicate with all Pods without NAT.</li>
 <li>The IP that a Pod sees itself as is the same IP that others see it as.</li>
 </ul>
 </section><section>
-<h1 id="its-turtles-all-the-down">It&rsquo;s turtles all the down</h1>
+<h3 id="its-turtles-all-the-down">It&rsquo;s turtles all the down</h3>
 <ul>
 <li>Node</li>
+<li>Kube-proxy</li>
 <li>Container</li>
-<li>Container to Container</li>
+<li>Container Network Interface</li>
 <li>Pod to Pod</li>
+<li>Kubernetes DNS</li>
 <li>Services</li>
 <li>External to Cluster</li>
+<li>Troubleshooting</li>
+<li>Network Policies</li>
 </ul>
 </section><section>
-<h1 id="node">Node</h1>
-<p><img src="/k8s-networking/images/node.png" alt=""></p>
+<h4 id="kubernetes-components">Kubernetes Components</h4>
+<p><img src="/k8s-networking/images/data_flow.png" alt=""></p>
+</section><section>
+<h2 id="kubernetes-node">Kubernetes Node</h2>
+<p><img src="/k8s-networking/images/data_flow_single_node.png" alt=""></p>
+
+
+
+<aside class="notes"><p>A network daemon that orchestrates network management on every node</p>
+</aside>
+</section><section>
+<h3 id="container-network-interface">Container Network Interface</h3>
+<p><img src="/k8s-networking/images/cni.png" alt=""></p>
+<p><a href="https://github.com/containernetworking/cni">https://github.com/containernetworking/cni</a></p>
 </section><section>
 <h1 id="container">Container</h1>
-<p><img src="/k8s-networking/images/node-container-1.png" alt=""></p>
+<p><img src="/k8s-networking/images/node_namespaces_to_container.png" alt=""></p>
 </section><section>
-<h3 id="container-to-container">Container to Container</h3>
-<p><img src="/k8s-networking/images/node-pod-1.png" alt=""></p>
+<h3 id="container-networking">Container Networking</h3>
+<p><img src="/k8s-networking/images/node_network_namespace_container.png" alt=""></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f pod.yml
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl exec -it bb1 -c curl localhost:80
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl exec -it bb1 -c bb1 -- curl localhost:80
 </code></pre></div></section><section>
 <h3 id="pod-to-pod">Pod to Pod</h3>
-<p><img src="/k8s-networking/images/node-container-host-2.png" alt=""></p>
+<p><img src="/k8s-networking/images/node_namespaces_multi_pod.png" alt=""></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl get pods -o wide
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl exec -it bb1 -c ping bb3
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl exec -it bb1 -c bb1 -- ping <span style="color:#66d9ef">$(</span>kubectl get pods bb3 -o json | jq .status.podIP -r<span style="color:#66d9ef">)</span>
 </code></pre></div></section><section>
+<h3 id="kubernetes-dns">Kubernetes DNS</h3>
+<p><img src="/k8s-networking/images/coredns.png" alt=""></p>
+</section><section>
 <h1 id="services">Services</h1>
 <ul>
 <li>NodePort</li>
@@ -65,8 +84,11 @@
 
 
 <aside class="notes"><p>ClusterIP: cluster-internal IP.  the Service only reachable from within the cluster. This is the default ServiceType.</p>
-<p>NodePort: Exposes the Service on each Node’s IP at a static port (the NodePort). A ClusterIP Service, to which the NodePort Service routes, is automatically created. You’ll be able to contact the NodePort Service, from outside the cluster, by requesting <!-- raw HTML omitted -->:<!-- raw HTML omitted -->.</p>
-<p>LoadBalancer: Exposes the Service externally using a cloud provider’s load balancer. NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.</p>
+<p>NodePort: Exposes the Service on each Node’s IP at a static port (the NodePort). A ClusterIP Service,
+to which the NodePort Service routes, is automatically created. You’ll be able to contact the
+NodePort Service, from outside the cluster, by requesting <!-- raw HTML omitted -->:<!-- raw HTML omitted -->.</p>
+<p>LoadBalancer: Exposes the Service externally using a cloud provider’s load balancer.
+NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.</p>
 </aside>
 </section><section>
 <h3 id="service-to-pod">Service to Pod</h3>
@@ -75,16 +97,12 @@
 </code></pre></div></section><section>
 <h1 id="external-to-cluster">External to Cluster</h1>
 <ul>
-<li>
-<p>Service Type Loadbalancer</p>
-</li>
-<li>
-<p>Ingress</p>
-</li>
+<li>Service Type Loadbalancer</li>
+<li>Ingress</li>
 </ul>
 </section><section>
 <h4 id="service-type-loadbalancer">Service Type LoadBalancer</h4>
-<p><img src="/k8s-networking/images/service-loadbalancer.png" alt=""></p>
+<p><img src="/k8s-networking/images/service_loadbalancer.png" alt=""></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f service-loadbalancer.yml
 </code></pre></div></section><section>
 <h1 id="ingress">Ingress</h1>
@@ -96,30 +114,67 @@
 <h3 id="ingress-controller">Ingress Controller</h3>
 <ul>
 <li>Nginx</li>
-<li>Istio</li>
 <li>Google Cloud Loadbalancer</li>
+<li>Contour</li>
+<li>Kong</li>
 </ul>
+<p>Lots more <a href="https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/">https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/</a></p>
+</section><section>
+<h4 id="ingress-controller-1">Ingress Controller</h4>
+<p><img src="/k8s-networking/images/ingress_cloud.png" alt=""></p>
 </section><section>
 <h3 id="ingress-rule">Ingress rule</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f ingress.yml
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.k8s.io/v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Ingress</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">basic-ingress</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">rules</span>:
+    - <span style="color:#f92672">http</span>:
+        <span style="color:#f92672">paths</span>:
+          - <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/testpath</span>
+            <span style="color:#f92672">pathType</span>: <span style="color:#ae81ff">Prefix</span>
+            <span style="color:#f92672">backend</span>:
+              <span style="color:#f92672">service</span>:
+                <span style="color:#f92672">name</span>: <span style="color:#ae81ff">my-service</span>
+                <span style="color:#f92672">port</span>:
+                  <span style="color:#f92672">number</span>: <span style="color:#ae81ff">8080</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f ingress.yml
 </code></pre></div></section><section>
-<h4 id="ingress-1">Ingress</h4>
-<p><img src="/k8s-networking/images/service-Ingress.png" alt=""></p>
+<h1 id="troubleshooting">Troubleshooting</h1>
+</section><section>
+<h3 id="network-policy">Network Policy</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.k8s.io/v1</span>
+<span style="color:#f92672">kind</span>: <span style="color:#ae81ff">NetworkPolicy</span>
+<span style="color:#f92672">metadata</span>:
+  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">demo-db</span>
+<span style="color:#f92672">spec</span>:
+  <span style="color:#f92672">podSelector</span>:
+    <span style="color:#f92672">matchLabels</span>:
+      <span style="color:#f92672">app</span>: <span style="color:#ae81ff">demo-db</span>
+  <span style="color:#f92672">policyTypes</span>:
+  - <span style="color:#ae81ff">Ingress</span>
+  <span style="color:#f92672">ingress</span>:
+  - <span style="color:#f92672">from</span>:
+    - <span style="color:#f92672">podSelector</span>:
+        <span style="color:#f92672">matchLabels</span>:
+          <span style="color:#f92672">app</span>: <span style="color:#ae81ff">demo</span>
+</code></pre></div></section><section>
+<h4 id="networking-and-kubernetes">Networking and Kubernetes</h4>
+<p><img src="/k8s-networking/images/cover.png" alt=""></p>
+<p>Available on <a href="https://www.amazon.com/Networking-Kubernetes-James-Strong-ebook/dp/B09FX149GC/">Amazon</a> and <a href="https://learning.oreilly.com/library/view/networking-and-kubernetes/9781492081647/">O&rsquo;Reilly</a></p>
 </section><section>
 <p>References:</p>
 <ul>
-<li>
-<p><a href="https://kubernetes.io/docs/concepts/configuration/overview/#services">K8 Services</a></p>
+<li><a href="https://github.com/nleiva/kubernetes-networking-links">Kubernetes Networking Links</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/access-application-cluster/">Kubernetes Services Tutorials</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/configuration/overview/#services">K8s Services</a>
+<ul>
+<li><a href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/">K8s Loadbalancer</a></li>
+</ul>
 </li>
-<li>
-<p><a href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/">K8 Loadbalancer</a></p>
-</li>
-<li>
-<p><a href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#external-load-balancer-providers">External Loadbalancers</a></p>
-</li>
-<li>
-<p><a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Ingress</a></p>
-</li>
+<li><a href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#external-load-balancer-providers">External Load balancers</a></li>
+<li><a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Ingress</a></li>
 </ul>
 </section>
 
@@ -142,7 +197,7 @@
   document.getElementsByTagName('head')[0].appendChild(link);
 </script>
 
-<script type="application/json" id="reveal-hugo-site-params">{"theme":"moon"}</script>
+<script type="application/json" id="reveal-hugo-site-params">{"theme":"solarized"}</script>
 <script type="application/json" id="reveal-hugo-page-params">null</script>
 
 <script src="/k8s-networking/reveal-js/js/reveal.js"></script>
