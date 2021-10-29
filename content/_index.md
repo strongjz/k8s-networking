@@ -30,7 +30,11 @@ outputs = ["Reveal"]
 
 ![](/k8s-networking/images/node.png)
 
+---
 
+# Kube-proxy
+
+A network daemon that orchestrates network management on every node
 
 ---
 
@@ -39,6 +43,14 @@ outputs = ["Reveal"]
 ![](/k8s-networking/images/node-container-1.png)
 
 ---
+
+# Container Network Interface
+
+
+https://github.com/containernetworking/cni
+
+---
+
 
 ### Container to Container 
 ![](/k8s-networking/images/node-pod-1.png)
@@ -66,6 +78,10 @@ kubectl exec -it bb1 -c ping bb3
 ```
 ---
 
+# Kubernetes DNS
+
+---
+
 # Services
 
 * NodePort
@@ -76,9 +92,12 @@ kubectl exec -it bb1 -c ping bb3
 
 ClusterIP: cluster-internal IP.  the Service only reachable from within the cluster. This is the default ServiceType.
 
-NodePort: Exposes the Service on each Node’s IP at a static port (the NodePort). A ClusterIP Service, to which the NodePort Service routes, is automatically created. You’ll be able to contact the NodePort Service, from outside the cluster, by requesting <NodeIP>:<NodePort>.
+NodePort: Exposes the Service on each Node’s IP at a static port (the NodePort). A ClusterIP Service, 
+to which the NodePort Service routes, is automatically created. You’ll be able to contact the 
+NodePort Service, from outside the cluster, by requesting <NodeIP>:<NodePort>.
 
-LoadBalancer: Exposes the Service externally using a cloud provider’s load balancer. NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.
+LoadBalancer: Exposes the Service externally using a cloud provider’s load balancer. 
+NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.
 
 {{% /note %}}
 
@@ -121,9 +140,12 @@ kubectl apply -f service-loadbalancer.yml
 
 ### Ingress Controller
 
-* Nginx
-* Istio 
+* Nginx 
 * Google Cloud Loadbalancer
+* Contour
+* Kong
+
+Lots more https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
 
 ---
 
@@ -141,15 +163,24 @@ kubectl apply -f ingress.yml
 
 ---
 
+# Troubleshooting
+
+---
+
+# Network Policy
+
+---
+
+
+
 
 References:
 
+* [Kubernetes Networking Links](https://github.com/nleiva/kubernetes-networking-links)
+* [Kubernetes Services Tutorials](https://kubernetes.io/docs/tasks/access-application-cluster/)
 * [K8 Services](https://kubernetes.io/docs/concepts/configuration/overview/#services)
-
 * [K8 Loadbalancer](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/)
-
 * [External Loadbalancers](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#external-load-balancer-providers)
-
 * [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 
 
