@@ -1,2 +1,2 @@
-# k8-networking
-Kubernetes Networking introduction
+# k8s-networking
+Kubernetes Networking Introduction
