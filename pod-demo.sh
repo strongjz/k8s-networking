@@ -48,7 +48,7 @@ wait
 
 BB3_ADR=$(kubectl get pods bb3 -o json | jq .status.podIP -r)
 p "BB3_ADR=\$(kubectl get pods bb3 -o json | jq .status.podIP -r)"
-pei "kubectl exec -it bb1 -c bb1 -- ping -c 4 \$(kubectl get pods bb3 -o json | jq .status.podIP -r)"
+pei "kubectl exec -it bb1 -c bb1 -- ping -c 4 \$BB3_ADR"
 
 wait
 
