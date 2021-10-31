@@ -28,7 +28,13 @@ DEMO_PROMPT="${GREEN}➜ ${CYAN}\W "
 # hide the evidence
 clear
 
+pei "cat pod.yml"
+
+wait
+
 pei "kubectl apply -f pod.yml"
+
+pei "kubectl get pods --watch"
 
 wait
 
@@ -36,8 +42,36 @@ pei "kubectl get pods -o wide"
 
 wait
 
-pei "kubectl exec -it bb1 -- curl localhost:80"
+pei "kubectl exec -it bb1 -c bb1 -- curl -s localhost:80"
 
 wait
 
-pei "kubectl exec -it bb1 -c bb1 -- ping \$(kubectl get pods bb3 -o json | jq .status.podIP -r)"
+BB3_ADR=$(kubectl get pods bb3 -o json | jq .status.podIP -r)
+p "BB3_ADR=\$(kubectl get pods bb3 -o json | jq .status.podIP -r)"
+pei "kubectl exec -it bb1 -c bb1 -- ping -c 4 \$(kubectl get pods bb3 -o json | jq .status.podIP -r)"
+
+wait
+
+NODE=$(kubectl get pods bb1 -o json | jq .spec.nodeName -r)
+BB1_ADR=$(kubectl get pods bb1 -o json | jq .status.podIP -r)
+CNI=$(docker exec kind-worker ip netns list | awk '{print $1}')
+
+p "NODE=\$(kubectl get pods bb1 -o json | jq .spec.nodeName -r)"
+p "BB1_ADR=\$(kubectl get pods bb1 -o json | jq .status.podIP -r)"
+
+pei "docker exec \$NODE curl -s \$BB1_ADR"
+
+wait
+
+pei "docker exec \$NODE ip netns list"
+
+wait
+
+pei "docker exec \$NODE ip a"
+
+wait
+
+p "CNI=\$(docker exec \$NODE ip netns list)"
+pei "docker exec \$NODE ip netns exec \$CNI ip a"
+wait
+

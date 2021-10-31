@@ -52,6 +52,14 @@ A network daemon that orchestrates network management on every node
 
 https://github.com/containernetworking/cni
 
+{{% note %}}
+1 .When the container runtime expects to perform network operations on a container, 
+it (like the kubelet in the case of K8s) calls the CNI plugin with the desired command.
+2. The container runtime also provides related network configuration and container-specific data to the plugin.
+3. The CNI plugin performs the required operations and reports the result.
+
+{{% /note %}}
+
 ---
 
 # Container
@@ -230,7 +238,7 @@ References:
 * [Kubernetes Networking Links](https://github.com/nleiva/kubernetes-networking-links)
 * [Kubernetes Services Tutorials](https://kubernetes.io/docs/tasks/access-application-cluster/)
 * [K8s Services](https://kubernetes.io/docs/concepts/configuration/overview/#services)
-  * [K8s Loadbalancer](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/)
+* [K8s Loadbalancer](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/)
 * [External Load balancers](https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#external-load-balancer-providers)
 * [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 

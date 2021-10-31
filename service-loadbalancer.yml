@@ -1,12 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-service-lb
+  name: loadbalancer-service
+  labels:
+    app: app
 spec:
   selector:
-    app: MyApp
+    app: app
   ports:
-    - protocol: TCP
-      port: 8081
-      targetPort: 80
+    - name: service-port
+      protocol: TCP
+      port: 80
+      targetPort: 8080
   type: LoadBalancer

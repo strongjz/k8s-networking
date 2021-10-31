@@ -1,15 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: basic-ingress
+  name: ingress-resource
+  annotations:
+    kubernetes.io/ingress.class: nginx
 spec:
   rules:
     - http:
         paths:
-          - path: /testpath
-            pathType: Prefix
+          - path: /host
+            pathType: Exact
             backend:
               service:
-                name: my-service
+                name: clusterip-service
                 port:
                   number: 8080
