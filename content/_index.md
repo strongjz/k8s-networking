@@ -119,7 +119,7 @@ github.com.             30      IN      A       140.82.113.4
 * NodePort
 * ClusterIP - Default
 * LoadBalancer
-* External
+* ExternalName
 * Headless
 
 {{% note %}}
@@ -158,9 +158,6 @@ NodePort and ClusterIP Services, to which the external load balancer routes, are
 
 ![](/k8s-networking/images/service_loadbalancer.png)
 
-```bash
-kubectl apply -f service-loadbalancer.yml
-```
 
 ---
 
@@ -177,8 +174,7 @@ kubectl apply -f service-loadbalancer.yml
 * Google Cloud Loadbalancer
 * Contour
 * Kong
-
-Lots more https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
+* Lots more https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
 
 ---
 
