@@ -72,14 +72,6 @@ it (like the kubelet in the case of K8s) calls the CNI plugin with the desired c
 
 ![](/k8s-networking/images/node_network_namespace_container.png)
 
-```bash
-kubectl apply -f pod.yml
-```
-
-```bash
-kubectl exec -it bb1 -c bb1 -- curl localhost:80
-```
-
 ---
 
 ### Pod to Pod
@@ -88,17 +80,47 @@ kubectl exec -it bb1 -c bb1 -- curl localhost:80
 
 ---
 
+# Pod Networking Demo 
+
+---
+
 ### Kubernetes DNS
 
 ![](/k8s-networking/images/coredns.png)
 
+https://coredns.io/
+
 ---
+
+### Kubernetes DNS
+
+```bash
+kubectl exec -it dnsutils -- host -v -t a github.com
+Trying "github.com.default.svc.cluster.local"
+Trying "github.com.svc.cluster.local"
+Trying "github.com.cluster.local"
+Trying "github.com"
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 9135
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;github.com.                    IN      A
+
+;; ANSWER SECTION:
+github.com.             30      IN      A       140.82.113.4
+```
+
+---
+
+
 
 # Services
 
 * NodePort
 * ClusterIP - Default
 * LoadBalancer
+* External
+* Headless
 
 {{% note %}}
 
@@ -119,9 +141,9 @@ NodePort and ClusterIP Services, to which the external load balancer routes, are
 
 ![](/k8s-networking/images/service.png)
 
-```bash
-kubectl apply -f service-clusterip.yml
-```
+---
+
+# Services Demo
 
 ---
 
@@ -186,17 +208,22 @@ spec:
                   number: 8080
 ```
 
-```bash
-kubectl apply -f ingress.yml
-```
+---
+
+# Loadbalancer and Ingress Demo
 
 ---
 
-# Troubleshooting
 
-- NetShoot https://hub.docker.com/r/nicolaka/netshoot
+### Troubleshooting
+
+![](/k8s-networking/images/4c.png)
+
+- [NetShoot image](https://hub.docker.com/r/nicolaka/netshoot)
 - Remove label from service endpoint
-- 
+- Check Ports match
+- Check Probes 
+- [CCCC check](https://kubernetes.io/docs/concepts/security/overview/)
 
 ---
 
