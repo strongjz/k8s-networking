@@ -86,13 +86,6 @@ kubectl exec -it bb1 -c bb1 -- curl localhost:80
 
 ![](/k8s-networking/images/node_namespaces_multi_pod.png)
 
-```bash
-kubectl get pods -o wide
-```
-
-```bash
-kubectl exec -it bb1 -c bb1 -- ping $(kubectl get pods bb3 -o json | jq .status.podIP -r)
-```
 ---
 
 ### Kubernetes DNS
@@ -200,6 +193,10 @@ kubectl apply -f ingress.yml
 ---
 
 # Troubleshooting
+
+- NetShoot https://hub.docker.com/r/nicolaka/netshoot
+- Remove label from service endpoint
+- 
 
 ---
 
