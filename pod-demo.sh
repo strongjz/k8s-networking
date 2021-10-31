@@ -75,3 +75,4 @@ p "CNI=\$(docker exec \$NODE ip netns list)"
 pei "docker exec \$NODE ip netns exec \$CNI ip a"
 wait
 
+pei "kubectl delete -f pod.yml"

@@ -35,10 +35,9 @@ pei "kubectl wait --namespace ingress-nginx \
        --selector=app.kubernetes.io/component=controller \
        --timeout=90s"
 
-
 wait
 
-pei "kubectl apply -f ingress-demo"
+pei "kubectl apply -f ingress.yml"
 
 wait
 
