@@ -62,3 +62,18 @@ pei "curl \$EXT_IP/host"
 pei "curl \$EXT_IP/host"
 wait
 
+# Service Load Balancer Demo
+p "#Service Load Balancer Demo"
+pei "kubectl apply -f service-loadbalancer.yml"
+wait
+pei "kubectl get svc loadbalancer-service"
+LB_IP=$(kubectl get svc -o json loadbalancer-service | jq -r .status.loadBalancer.ingress[0].hostname)
+#Curl it
+p "LB_IP=\$(kubectl get svc -o json loadbalancer-service | jq -r .status.loadBalancer.ingress[0].hostname)"
+pei "curl \$LB_IP/host"
+pei "curl \$LB_IP/host"
+pei "curl \$LB_IP/host"
+pei "curl \$LB_IP/host"
+pei "curl \$LB_IP/host"
+pei "curl \$LB_IP/host"
+
