@@ -47,7 +47,7 @@
 <p><img src="/k8s-networking/images/data_flow.png" alt=""></p>
 </section><section>
 <h2 id="kubernetes-node">Kubernetes Node</h2>
-<p><img src="/k8s-networking/images/data_flow_single_node.png" alt=""></p>
+<p><img src="/k8s-networking/images/networking-node.png" alt=""></p>
 
 
 
@@ -57,28 +57,52 @@
 <h3 id="container-network-interface">Container Network Interface</h3>
 <p><img src="/k8s-networking/images/cni.png" alt=""></p>
 <p><a href="https://github.com/containernetworking/cni">https://github.com/containernetworking/cni</a></p>
+
+
+
+<aside class="notes"><p>1 .When the container runtime expects to perform network operations on a container,
+it (like the kubelet in the case of K8s) calls the CNI plugin with the desired command.
+2. The container runtime also provides related network configuration and container-specific data to the plugin.
+3. The CNI plugin performs the required operations and reports the result.</p>
+</aside>
 </section><section>
 <h1 id="container">Container</h1>
 <p><img src="/k8s-networking/images/node_namespaces_to_container.png" alt=""></p>
 </section><section>
 <h3 id="container-networking">Container Networking</h3>
 <p><img src="/k8s-networking/images/node_network_namespace_container.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f pod.yml
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl exec -it bb1 -c bb1 -- curl localhost:80
-</code></pre></div></section><section>
+</section><section>
 <h3 id="pod-to-pod">Pod to Pod</h3>
 <p><img src="/k8s-networking/images/node_namespaces_multi_pod.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl get pods -o wide
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl exec -it bb1 -c bb1 -- ping <span style="color:#66d9ef">$(</span>kubectl get pods bb3 -o json | jq .status.podIP -r<span style="color:#66d9ef">)</span>
-</code></pre></div></section><section>
+</section><section>
+<h1 id="pod-networking-demo">Pod Networking Demo</h1>
+</section><section>
 <h3 id="kubernetes-dns">Kubernetes DNS</h3>
 <p><img src="/k8s-networking/images/coredns.png" alt=""></p>
+<p><a href="https://coredns.io/">https://coredns.io/</a></p>
 </section><section>
+<h3 id="kubernetes-dns-1">Kubernetes DNS</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl exec -it dnsutils -- host -v -t a github.com
+Trying <span style="color:#e6db74">&#34;github.com.default.svc.cluster.local&#34;</span>
+Trying <span style="color:#e6db74">&#34;github.com.svc.cluster.local&#34;</span>
+Trying <span style="color:#e6db74">&#34;github.com.cluster.local&#34;</span>
+Trying <span style="color:#e6db74">&#34;github.com&#34;</span>
+;; -&gt;&gt;HEADER<span style="color:#e6db74">&lt;&lt;- opco</span>de: QUERY, status: NOERROR, id: <span style="color:#ae81ff">9135</span>
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: <span style="color:#ae81ff">0</span>
+
+;; QUESTION SECTION:
+;github.com.                    IN      A
+
+;; ANSWER SECTION:
+github.com.             <span style="color:#ae81ff">30</span>      IN      A       140.82.113.4
+</code></pre></div></section><section>
 <h1 id="services">Services</h1>
 <ul>
 <li>NodePort</li>
 <li>ClusterIP - Default</li>
 <li>LoadBalancer</li>
+<li>ExternalName</li>
+<li>Headless</li>
 </ul>
 
 
@@ -93,8 +117,9 @@ NodePort and ClusterIP Services, to which the external load balancer routes, are
 </section><section>
 <h3 id="service-to-pod">Service to Pod</h3>
 <p><img src="/k8s-networking/images/service.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f service-clusterip.yml
-</code></pre></div></section><section>
+</section><section>
+<h1 id="services-demo">Services Demo</h1>
+</section><section>
 <h1 id="external-to-cluster">External to Cluster</h1>
 <ul>
 <li>Service Type Loadbalancer</li>
@@ -103,8 +128,7 @@ NodePort and ClusterIP Services, to which the external load balancer routes, are
 </section><section>
 <h4 id="service-type-loadbalancer">Service Type LoadBalancer</h4>
 <p><img src="/k8s-networking/images/service_loadbalancer.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f service-loadbalancer.yml
-</code></pre></div></section><section>
+</section><section>
 <h1 id="ingress">Ingress</h1>
 <ul>
 <li>Ingress Controller</li>
@@ -117,8 +141,8 @@ NodePort and ClusterIP Services, to which the external load balancer routes, are
 <li>Google Cloud Loadbalancer</li>
 <li>Contour</li>
 <li>Kong</li>
+<li>Lots more <a href="https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/">https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/</a></li>
 </ul>
-<p>Lots more <a href="https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/">https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/</a></p>
 </section><section>
 <h4 id="ingress-controller-1">Ingress Controller</h4>
 <p><img src="/k8s-networking/images/ingress_cloud.png" alt=""></p>
@@ -139,9 +163,18 @@ NodePort and ClusterIP Services, to which the external load balancer routes, are
                 <span style="color:#f92672">name</span>: <span style="color:#ae81ff">my-service</span>
                 <span style="color:#f92672">port</span>:
                   <span style="color:#f92672">number</span>: <span style="color:#ae81ff">8080</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape>kubectl apply -f ingress.yml
 </code></pre></div></section><section>
-<h1 id="troubleshooting">Troubleshooting</h1>
+<h1 id="loadbalancer-and-ingress-demo">Loadbalancer and Ingress Demo</h1>
+</section><section>
+<h3 id="troubleshooting">Troubleshooting</h3>
+<p><img src="/k8s-networking/images/4c.png" alt=""></p>
+<ul>
+<li><a href="https://hub.docker.com/r/nicolaka/netshoot">NetShoot image</a></li>
+<li>Remove label from service endpoint</li>
+<li>Check Ports match</li>
+<li>Check Probes</li>
+<li><a href="https://kubernetes.io/docs/concepts/security/overview/">CCCC check</a></li>
+</ul>
 </section><section>
 <h3 id="network-policy">Network Policy</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="nohighlight" data-noescape><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">networking.k8s.io/v1</span>
@@ -168,11 +201,8 @@ NodePort and ClusterIP Services, to which the external load balancer routes, are
 <ul>
 <li><a href="https://github.com/nleiva/kubernetes-networking-links">Kubernetes Networking Links</a></li>
 <li><a href="https://kubernetes.io/docs/tasks/access-application-cluster/">Kubernetes Services Tutorials</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/configuration/overview/#services">K8s Services</a>
-<ul>
+<li><a href="https://kubernetes.io/docs/concepts/configuration/overview/#services">K8s Services</a></li>
 <li><a href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/">K8s Loadbalancer</a></li>
-</ul>
-</li>
 <li><a href="https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#external-load-balancer-providers">External Load balancers</a></li>
 <li><a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Ingress</a></li>
 </ul>
