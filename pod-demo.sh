@@ -32,7 +32,7 @@ pei "cat pod.yml"
 
 wait
 
-pei "kubectl apply -f pod.yml"
+pei "kubectl apply -f pod.yml,netshoot.yml"
 
 pei "kubectl get pods --watch"
 
