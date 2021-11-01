@@ -38,7 +38,7 @@ outputs = ["Reveal"]
 
 ## Kubernetes Node
 
-![](/k8s-networking/images/data_flow_single_node.png)
+![](/k8s-networking/images/networking-node.png)
 
 {{% note %}}
 A network daemon that orchestrates network management on every node
